@@ -1,0 +1,4 @@
+Spark is a fast cluster computing system.
+It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general computation graphs for data processing.
+Spark runs programs up to 100x faster than Hadoop MapReduce in memory, or 10x faster on disk.
+This is a sample corpus to test tokenization, stopwords removal, bigrams, and TF-IDF.
