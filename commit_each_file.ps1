@@ -36,6 +36,29 @@ $items = @(
     @{ path = 'welcome.txt'; message = 'Add workspace welcome notes and brief overview for collaborators.' }
 )
 
+# Auto-discover untracked and modified files and append them to the list
+$existingPaths = $items | ForEach-Object { $_.path }
+
+try {
+    $gitUntracked = git ls-files --others --exclude-standard 2>$null | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
+} catch { $gitUntracked = @() }
+
+try {
+    $gitModified = git ls-files -m 2>$null | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
+} catch { $gitModified = @() }
+
+$candidates = @($gitUntracked + $gitModified) | Select-Object -Unique
+foreach ($f in $candidates) {
+    if ($existingPaths -contains $f) { continue }
+    if ($f -like 'untracked_backup_*' -or $f -eq '.gitignore') { continue }
+    if ($gitUntracked -contains $f) {
+        $msg = "Add $f (auto-generated commit message)"
+    } else {
+        $msg = "Update $f (auto-generated commit message)"
+    }
+    $items += @{ path = $f; message = $msg }
+}
+
 # We'll ensure a .gitignore entry for __pycache__ and commit it
 $gitignorePath = '.gitignore'
 $gitignoreMessage = 'Do not commit: add `.gitignore` entry to exclude `__pycache__` and avoid committing compiled Python bytecode.'
