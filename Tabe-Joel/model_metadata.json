@@ -1,0 +1,17 @@
+{
+    "task_type": "classification",
+    "feature_names": [
+        "age"
+    ],
+    "model_type": "RandomForestClassifier",
+    "timestamp": "2026-02-02T16:06:16.212190",
+    "training_history": {
+        "train_score": 1.0,
+        "test_score": 0.0,
+        "cv_scores": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.5
+        ]
+    }
+}
